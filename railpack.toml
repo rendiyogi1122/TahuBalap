@@ -1,5 +1,5 @@
-[build]
-buildCommand = "composer install --no-dev && npm run build && php artisan config:cache && php artisan event:cache && php artisan route:cache"
-
 [deploy]
-startCommand = "php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+startCommand = "php artisan migrate --force && php artisan storage:link && php artisan view:cache && frankenphp run --config /Caddyfile"
+
+[build]
+buildCommand = "composer install --optimize-autoloader --no-scripts --no-interaction && npm ci && npm run build && mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache && chmod -R a+rw storage && php artisan config:cache && php artisan event:cache && php artisan route:cache"
